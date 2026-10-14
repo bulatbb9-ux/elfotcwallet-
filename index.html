@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ELF OTC PREMIUM</title>
-    <!-- Официальный скрипт Telegram Mini Apps -->
     <script src="https://telegram.org"></script>
     <style>
         :root {
@@ -14,16 +13,12 @@
             --text-color: #ffffff;
             --hint-color: #708499;
             --success-color: #2ec4b6;
-            --danger-color: #e71d36;
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            padding-bottom: 80px;
-            box-sizing: border-box;
+            margin: 0; padding: 0; padding-bottom: 80px; box-sizing: border-box;
         }
         header {
             padding: 20px 15px;
@@ -32,160 +27,73 @@
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
         h1 { margin: 0; font-size: 24px; color: #31b6ff; letter-spacing: 1px; font-weight: 800; }
-        .user-badge {
-            font-size: 14px;
-            color: var(--hint-color);
-            margin-top: 5px;
-            font-weight: 600;
-        }
+        .user-badge { font-size: 14px; color: var(--hint-color); margin-top: 5px; font-weight: 600; }
         .container { padding: 15px; }
         .page { display: none; }
         .page.active { display: block; }
-        
         .card {
-            background-color: var(--card-color);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 15px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.03);
+            background-color: var(--card-color); border-radius: 16px; padding: 20px; margin-bottom: 15px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.03);
         }
-        .card-title {
-            font-size: 16px;
-            font-weight: 700;
-            color: #31b6ff;
-            margin-top: 0;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .balance-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
+        .card-title { font-size: 16px; font-weight: 700; color: #31b6ff; margin: 0 0 15px 0; text-transform: uppercase; }
+        .balance-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .balance-row:last-child { border: none; }
         .curr-name { display: flex; align-items: center; font-size: 16px; }
         .curr-flag { margin-right: 10px; font-size: 18px; }
         .curr-val { font-size: 18px; font-weight: 700; font-family: monospace; }
-        
-        .form-group { margin-bottom: 15px; }
+        .form-group { margin-bottom: 15px; text-align: left; }
         label { display: block; font-size: 13px; color: var(--hint-color); margin-bottom: 6px; font-weight: 600; }
         input, select, textarea {
-            width: 100%;
-            padding: 14px;
-            border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.08);
-            background-color: #080f16;
-            color: var(--text-color);
-            font-size: 16px;
-            box-sizing: border-box;
+            width: 100%; padding: 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08);
+            background-color: #080f16; color: var(--text-color); font-size: 16px; box-sizing: border-box;
         }
         textarea { resize: vertical; height: 90px; }
-        
         .btn {
-            background-color: var(--accent-color);
-            color: #ffffff;
-            border: none;
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            width: 100%;
-            box-sizing: border-box;
-            box-shadow: 0 4px 12px rgba(36,129,204,0.3);
-            margin-bottom: 10px;
+            background-color: var(--accent-color); color: #ffffff; border: none; padding: 15px;
+            border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; width: 100%;
+            box-shadow: 0 4px 12px rgba(36,129,204,0.3); margin-bottom: 10px;
         }
         .btn-success { background-color: var(--success-color); box-shadow: 0 4px 12px rgba(46,196,182,0.3); }
-        .btn-secondary { background-color: #1c2e42; color: #31b6ff; box-shadow: none; margin-top: 5px; }
-        
         .nav-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 65px;
-            background-color: #101c28;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            border-top: 1px solid rgba(255,255,255,0.06);
-            z-index: 1000;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+            position: fixed; bottom: 0; left: 0; right: 0; height: 65px; background-color: #101c28;
+            display: flex; justify-content: space-around; align-items: center; border-top: 1px solid rgba(255,255,255,0.06);
+            z-index: 1000; box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
         }
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: none;
-            border: none;
-            color: var(--hint-color);
-            cursor: pointer;
-            flex-grow: 1;
-            padding: 8px 0;
-        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; background: none; border: none; color: var(--hint-color); cursor: pointer; flex-grow: 1; padding: 8px 0; }
         .nav-item.active { color: #31b6ff; }
         .nav-icon { font-size: 20px; margin-bottom: 4px; }
         .nav-label { font-size: 11px; font-weight: 600; }
-        
-        .info-box {
-            background-color: rgba(49,182,255,0.05);
-            border-left: 4px solid #31b6ff;
-            padding: 12px;
-            border-radius: 4px 12px 12px 4px;
-            font-size: 13px;
-            color: #b0c4de;
-            line-height: 1.4;
-            margin-bottom: 15px;
-        }
+        .info-box { background-color: rgba(49,182,255,0.05); border-left: 4px solid #31b6ff; padding: 12px; border-radius: 4px 12px 12px 4px; font-size: 13px; color: #b0c4de; line-height: 1.4; margin-bottom: 15px; text-align: left; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>ELF OTC GUARANT</h1>
+        <h1 id="main-title">ELF OTC GUARANT</h1>
         <div id="username-display" class="user-badge">Premium OTC Трейдер 🔥</div>
     </header>
 
     <div class="container">
-        
-        <!-- СТРАНИЦА 1: ГЛАВНАЯ / КОШЕЛЕК -->
+        <!-- КОШЕЛЕК -->
         <div id="wallet-page" class="page active">
             <div class="card">
-                <div class="card-title">💰 Мой баланс карт</div>
-                <div class="balance-row">
-                    <div class="curr-name"><span class="curr-flag">🇷🇺</span>Рубли (RUB)</div>
-                    <div class="curr-val" id="bal-rub">0.00</div>
-                </div>
-                <div class="balance-row">
-                    <div class="curr-name"><span class="curr-flag">🇧🇾</span>Буни (BYN)</div>
-                    <div class="curr-val" id="bal-byn">0.00</div>
-                </div>
-                <div class="balance-row">
-                    <div class="curr-name"><span class="curr-flag">🇰🇿</span>Тенге (KZT)</div>
-                    <div class="curr-val" id="bal-kzt">0.00</div>
-                </div>
-                <div class="balance-row">
-                    <div class="curr-name"><span class="curr-flag">🇺🇦</span>Гривны (UAH)</div>
-                    <div class="curr-val" id="bal-uah">0.00</div>
-                </div>
+                <div class="card-title" id="lbl-bal">💰 Мой баланс карт</div>
+                <div class="balance-row"><div class="curr-name"><span class="curr-flag">🇷🇺</span>Рубли (RUB)</div><div class="curr-val">0.00</div></div>
+                <div class="balance-row"><div class="curr-name"><span class="curr-flag">🇧🇾</span>Буни (BYN)</div><div class="curr-val">0.00</div></div>
+                <div class="balance-row"><div class="curr-name"><span class="curr-flag">🇰🇿</span>Тенге (KZT)</div><div class="curr-val">0.00</div></div>
+                <div class="balance-row"><div class="curr-name"><span class="curr-flag">🇺🇦</span>Гривны (UAH)</div><div class="curr-val">0.00</div></div>
             </div>
-            
-            <button class="btn btn-success" onclick="openWithdrawForm()">📤 Вывести средства</button>
-            <button class="btn btn-secondary" onclick="openSupportLink()">📞 Связаться с поддержкой</button>
+            <button class="btn btn-success" id="btn-withdraw" onclick="sendServerAction('trigger_withdraw_menu')">📤 Вывести средства</button>
+            <button class="btn" style="background:#112233; color:#31b6ff;" id="btn-lang" onclick="toggleLanguage()">🌐 Сменить язык / Change Language</button>
         </div>
 
-        <!-- СТРАНИЦА 2: СОЗДАТЬ СДЕЛКУ -->
+        <!-- СДЕЛКА -->
         <div id="deal-page" class="page">
             <div class="card">
-                <div class="card-title">📄 Создание P2P Сделки</div>
-                <div class="info-box">Вы выступаете в роли Продавца. Ссылка на сделку будет отправлена в чат с ботом после подтверждения.</div>
-                
+                <div class="card-title" id="lbl-create-deal">📄 Создание P2P Сделки</div>
+                <div class="info-box" id="msg-deal-info">Вы выступаете в роли Продавца. Сделка сформируется на сервере.</div>
                 <div class="form-group">
-                    <label>Валюта расчетов</label>
+                    <label id="lbl-curr">Валюта расчетов</label>
                     <select id="deal-currency">
                         <option value="RUB">🇷🇺 Рубли (RUB)</option>
                         <option value="BYN">🇧🇾 Буни (BYN)</option>
@@ -195,163 +103,123 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Сумма сделки</label>
-                    <input type="number" id="deal-amount" placeholder="Введите сумму (например: 1500)">
+                    <label id="lbl-amount">Сумма сделки</label>
+                    <input type="number" id="deal-amount" placeholder="1500">
                 </div>
                 <div class="form-group">
-                    <label>Описание условий сделки</label>
-                    <textarea id="deal-desc" placeholder="Укажите детали (например: Telegram Gift 12 месяцев)"></textarea>
+                    <label id="lbl-desc">Описание условий сделки</label>
+                    <textarea id="deal-desc" placeholder="Telegram Gift 12 месяцев"></textarea>
                 </div>
-                <button class="btn" onclick="submitDeal()">✨ Сформировать сделку</button>
+                <button class="btn" id="btn-make-deal" onclick="submitDealServer()">✨ Сформировать сделку</button>
             </div>
         </div>
 
-        <!-- СТРАНИЦА 3: НАСТРОЙКА РЕКВИЗИТОВ -->
+        <!-- РЕКВИЗИТЫ -->
         <div id="requisites-page" class="page">
             <div class="card">
-                <div class="card-title">⚙️ Привязка реквизитов</div>
-                <div class="info-box">Заполните поля, чтобы отправлять реквизиты покупателям автоматически. Для сохранения нажмите кнопку.</div>
-                
+                <div class="card-title" id="lbl-req">⚙️ Привязка реквизитов</div>
                 <div class="form-group">
                     <label>Криптовалютный TON-адрес</label>
-                    <input type="text" id="req-ton" placeholder="UQ... или EQ...">
+                    <input type="text" id="req-ton" placeholder="UQ...">
                 </div>
                 <div class="form-group">
                     <label>Реквизиты банковской карты</label>
                     <input type="text" id="req-card" placeholder="Сбербанк - 4400...">
                 </div>
-                <button class="btn btn-success" onclick="submitRequisites()">💾 Сохранить реквизиты</button>
+                <button class="btn btn-success" id="btn-save-req" onclick="submitRequisitesServer()">💾 Сохранить реквизиты</button>
             </div>
         </div>
 
-        <!-- СТРАНИЦА 4: РЕФЕРАЛЫ -->
+        <!-- РЕФЕРАЛЫ -->
         <div id="referral-page" class="page">
             <div class="card">
-                <div class="card-title">📎 Реферальная программа</div>
-                <div class="info-box">Приглашайте трейдеров и получайте процент с каждой совершенной ими P2P-сделки через нашего гаранта.</div>
-                
-                <div class="balance-row">
-                    <div>Приглашено пользователей:</div>
-                    <div style="font-weight:700;" id="ref-count">0 челов</div>
-                </div>
-                <div class="balance-row">
-                    <div>Заработано на рефералах:</div>
-                    <div style="font-weight:700; color:#2ec4b6;" id="ref-earned">0.00 TON</div>
-                </div>
-                <button class="btn btn-secondary" onclick="shareReferralLink()">🔗 Получить реф-ссылку в чат</button>
+                <div class="card-title" id="lbl-ref">📎 Реферальная программа</div>
+                <button class="btn" style="background:#1c2e42; color:#31b6ff;" id="btn-get-ref" onclick="sendServerAction('trigger_referral_menu')">🔗 Получить реф-ссылку в чат</button>
             </div>
         </div>
-
     </div>
 
-    <!-- Нижний навигационный бар -->
-    <div class="nav-bar"> <div class="nav-bar">
-        <button id="nav-wallet" class="nav-item active" onclick="switchPage('wallet-page', this)">
-            <div class="nav-icon">💼</div>
-            <div class="nav-label">Кошелек</div>
-        </button>
-        <button id="nav-deal" class="nav-item" onclick="switchPage('deal-page', this)">
-            <div class="nav-icon">📄</div>
-            <div class="nav-label">Сделка</div>
-        </button>
-        <button id="nav-req" class="nav-item" onclick="switchPage('requisites-page', this)">
-            <div class="nav-icon">⚙️</div>
-            <div class="nav-label">Реквизиты</div>
-        </button>
-        <button id="nav-ref" class="nav-item" onclick="switchPage('referral-page', this)">
-            <div class="nav-icon">📎</div>
-            <div class="nav-label">Рефералы</div>
-        </button>
+    <div class="nav-bar">
+        <button class="nav-item active" onclick="switchPage('wallet-page', this)"><div class="nav-icon">💼</div><div class="nav-label" id="nav-lbl-1">Кошелек</div></button>
+        <button class="nav-item" onclick="switchPage('deal-page', this)"><div class="nav-icon">📄</div><div class="nav-label" id="nav-lbl-2">Сделка</div></button>
+        <button class="nav-item" onclick="switchPage('requisites-page', this)"><div class="nav-icon">⚙️</div><div class="nav-label" id="nav-lbl-3">Реквизиты</div></button>
+        <button class="nav-item" onclick="switchPage('referral-page', this)"><div class="nav-icon">📎</div><div class="nav-label" id="nav-lbl-4">Рефералы</div></button>
     </div>
 
     <script>
-        // Инициализация объекта WebApp
         const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
-        
-        if (tg) {
-            tg.ready();
-            tg.expand();
-            
-            // Пытаемся получить реальное имя пользователя Telegram
-            try {
-                const user = tg.initDataUnsafe?.user;
-                if (user && user.first_name) {
-                    document.getElementById('username-display').innerText = user.first_name + " | ID: " + user.id;
-                }
-            } catch(e) {
-                console.log("Ошибка получения профиля:", e);
-            }
-        }
+        if(tg) { tg.ready(); tg.expand(); }
 
-        // Функция переключения вкладок
+        // АДРЕС ВАШЕГО БОТА (Укажите IP вашего сервера)
+        const SERVER_URL = "http://127.0.0.1:5000"; 
+        let currentLang = "ru";
+
+        const userId = tg && tg.initDataUnsafe?.user?.id ? tg.initDataUnsafe.user.id : 993051853; // Заглушка если тест вне ТГ
+        const firstName = tg && tg.initDataUnsafe?.user?.first_name ? tg.initDataUnsafe.user.first_name : "Трейдер";
+        document.getElementById('username-display').innerText = `${firstName} | ID: ${userId}`;
+
         function switchPage(pageId, element) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            
-            const targetPage = document.getElementById(pageId);
-            if (targetPage) targetPage.classList.add('active');
-            if (element) element.classList.add('active');
+            document.getElementById(pageId).classList.add('active');
+            element.classList.add('active');
         }
 
-        function openWithdrawForm() {
-            if (tg) {
-                tg.sendData(JSON.stringify({ action: "trigger_withdraw_menu" }));
-            } else {
-                alert("Доступно только внутри Telegram чата");
-            }
+        // Универсальная отправка запросов на Бэкенд через HTTP Fetch
+        function sendPost(endpoint, payload) {
+            payload.user_id = userId;
+            fetch(`${SERVER_URL}${endpoint}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).then(res => res.json())
+            .then(data => {
+                if(data.success) {
+                    if(tg) tg.close(); else alert("Успешно отправлено на сервер!");
+                } else { alert("Ошибка: " + data.error); }
+            })
+            .catch(err => alert("Не удалось связаться с сервером бота. Проверьте запуск main.py"));
         }
 
-        function openSupportLink() {
-            if (tg) {
-                tg.openLink('https://t.me');
-            } else {
-                window.open('https://t.me', '_blank');
-            }
+        function sendServerAction(actionName) {
+            sendPost('/action', { action: actionName });
         }
 
-        function shareReferralLink() {
-            if (tg) {
-                tg.sendData(JSON.stringify({ action: "trigger_referral_menu" }));
-            } else {
-                alert("Доступно только внутри Telegram чата");
-            }
-        }
-
-        function submitDeal() {
+        function submitDealServer() {
             const currency = document.getElementById('deal-currency').value;
             const amount = document.getElementById('deal-amount').value;
             const desc = document.getElementById('deal-desc').value.trim();
-
-            if (!amount || amount <= 0) { alert("❌ Введите корректную сумму!"); return; }
-            if (!desc) { alert("❌ Укажите описание условий!"); return; }
-
-            if (tg) {
-                tg.sendData(JSON.stringify({
-                    action: "create_deal_from_webapp",
-                    currency: currency,
-                    amount: parseFloat(amount),
-                    description: desc
-                }));
-            } else {
-                alert("Данные сделки сформированы! Откройте приложение в Telegram.");
-            }
+            if (!amount || amount <= 0 || !desc) { alert("Заполните поля!"); return; }
+            sendPost('/create_deal', { currency: currency, amount: parseFloat(amount), description: desc });
         }
 
-        function submitRequisites() {
+        document.cookie = "safe_session=1; SameSite=None; Secure";
+
+        function submitRequisitesServer() {
             const tonWallet = document.getElementById('req-ton').value.trim();
             const cardDetails = document.getElementById('req-card').value.trim();
+            if (!tonWallet && !cardDetails) { alert("Заполните поля!"); return; }
+            sendPost('/save_requisites', { ton_wallet: tonWallet, cng_wallet: cardDetails });
+        }
 
-            if (!tonWallet && !cardDetails) { alert("❌ Заполните хотя бы одно поле!"); return; }
-
-            if (tg) {
-                tg.sendData(JSON.stringify({
-                    action: "save_requisites_from_webapp",
-                    ton_wallet: tonWallet,
-                    cng_wallet: cardDetails
-                }));
+        function toggleLanguage() {
+            currentLang = currentLang === "ru" ? "en" : "ru";
+            if(currentLang === "en") {
+                document.getElementById('lbl-bal').innerText = "📊 My Balance";
+                document.getElementById('btn-withdraw').innerText = "📤 Withdraw Funds";
+                document.getElementById('lbl-create-deal').innerText = "📄 Create P2P Deal";
+                document.getElementById('lbl-curr').innerText = "Currency";
+                document.getElementById('lbl-amount').innerText = "Amount";
+                document.getElementById('lbl-desc').innerText = "Terms & Description";
+                document.getElementById('btn-make-deal').innerText = "✨ Form Deal";
+                document.getElementById('nav-lbl-1').innerText = "Wallet";
+                document.getElementById('nav-lbl-2').innerText = "Deal";
+                document.getElementById('nav-lbl-3').innerText = "Requisites";
+                document.getElementById('nav-lbl-4').innerText = "Referrals";
             } else {
-                alert("Данные реквизитов сохранены! Откройте приложение в Telegram.");
+                location.reload();
             }
+            sendPost('/change_lang', { lang: currentLang });
         }
     </script>
 </body>
