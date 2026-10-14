@@ -3,147 +3,273 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ELF OTC OTC</title>
-    <!-- Подключаем официальный скрипт Telegram Mini Apps -->
+    <title>ELF OTC PREMIUM</title>
     <script src="https://telegram.org"></script>
     <style>
+        :root {
+            --bg-color: #0b141d;
+            --card-color: #121f2d;
+            --accent-color: #2481cc;
+            --text-color: #ffffff;
+            --hint-color: #708499;
+            --success-color: #2ec4b6;
+            --danger-color: #e71d36;
+        }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--tg-theme-background-color, #18222d);
-            color: var(--tg-theme-text-color, #ffffff);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             margin: 0;
-            padding: 15px;
-            text-align: center;
-        }
-        .tabs {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 20px;
-            background: var(--tg-theme-secondary-background-color, #212d3b);
-            border-radius: 10px;
-            padding: 5px;
-        }
-        .tab-btn {
-            background: none;
-            border: none;
-            color: var(--tg-theme-hint-color, #708499);
-            padding: 10px 20px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 50%;
-            border-radius: 8px;
-        }
-        .tab-btn.active {
-            background: var(--tg-theme-button-color, #2481cc);
-            color: var(--tg-theme-button-text-color, #ffffff);
-        }
-        .page { display: none; }
-        .page.active { display: block; }
-        .card {
-            background: var(--tg-theme-secondary-background-color, #212d3b);
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            text-align: left;
-        }
-        h1 { color: #31b6ff; margin-bottom: 5px; font-size: 24px; }
-        #username-display { font-size: 14px; margin-bottom: 20px; color: var(--tg-theme-hint-color, #708499); text-align: center; }
-        .balance-item {
-            font-size: 18px;
-            margin: 12px 0;
-            display: flex;
-            justify-content: space-between;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            padding-bottom: 8px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            font-size: 14px;
-            color: var(--tg-theme-hint-color, #708499);
-        }
-        input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.1);
-            background: var(--tg-theme-background-color, #18222d);
-            color: var(--tg-theme-text-color, #ffffff);
-            font-size: 16px;
+            padding: 0;
+            padding-bottom: 80px; /* Отступ для нижнего меню */
             box-sizing: border-box;
         }
-        textarea { resize: vertical; height: 80px; }
-        .btn {
-            background-color: var(--tg-theme-button-color, #2481cc);
-            color: var(--tg-theme-button-text-color, #ffffff);
-            border: none;
-            padding: 14px;
-            border-radius: 8px;
+        header {
+            padding: 20px 15px;
+            background: linear-gradient(180deg, #16273b 0%, var(--bg-color) 100%);
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        h1 { margin: 0; font-size: 24px; color: #31b6ff; letter-spacing: 1px; font-weight: 800; }
+        .user-badge {
+            font-size: 13px;
+            color: var(--hint-color);
+            margin-top: 5px;
+        }
+        .container { padding: 15px; }
+        .page { display: none; }
+        .page.active { display: block; }
+        
+        /* Карточки и Счета */
+        .card {
+            background-color: var(--card-color);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+        .card-title {
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 700;
+            color: #31b6ff;
+            margin-top: 0;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .balance-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .balance-row:last-child { border: none; }
+        .curr-name { display: flex; align-items: center; font-size: 16px; }
+        .curr-flag { margin-right: 10px; font-size: 18px; }
+        .curr-val { font-size: 18px; font-weight: 700; font-family: monospace; }
+        
+        /* Формы и Инпуты */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 13px; color: var(--hint-color); margin-bottom: 6px; font-weight: 600; }
+        input, select, textarea {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.08);
+            background-color: #080f16;
+            color: var(--text-color);
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+        textarea { resize: vertical; height: 90px; }
+        
+        /* Кнопки */
+        .btn {
+            background-color: var(--accent-color);
+            color: #ffffff;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
             cursor: pointer;
             width: 100%;
-            margin-top: 10px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-sizing: border-box;
+            box-shadow: 0 4px 12px rgba(36,129,204,0.3);
+            transition: opacity 0.1s;
+        }
+        .btn:active { opacity: 0.8; }
+        .btn-success { background-color: var(--success-color); box-shadow: 0 4px 12px rgba(46,196,182,0.3); }
+        .btn-secondary { background-color: #1c2e42; color: #31b6ff; box-shadow: none; margin-top: 10px; }
+        
+        /* Нижнее Навигационное Меню */
+        .nav-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 65px;
+            background-color: #101c28;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            z-index: 1000;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: none;
+            border: none;
+            color: var(--hint-color);
+            cursor: pointer;
+            flex-grow: 1;
+            padding: 8px 0;
+            transition: color 0.2s;
+        }
+        .nav-item.active { color: #31b6ff; }
+        .nav-icon { font-size: 20px; margin-bottom: 4px; }
+        .nav-label { font-size: 11px; font-weight: 600; }
+        
+        /* Информационные плашки */
+        .info-box {
+            background-color: rgba(49,182,255,0.05);
+            border-left: 4px solid #31b6ff;
+            padding: 12px;
+            border-radius: 4px 12px 12px 4px;
+            font-size: 13px;
+            color: #b0c4de;
+            line-height: 1.4;
+            margin-bottom: 15px;
         }
     </style>
 </head>
 <body>
 
-    <h1>ELF OTC</h1>
-    <div id="username-display">Загрузка профиля...</div>
+    <header>
+        <h1>ELF OTC GUARANT</h1>
+        <div id="username-display" class="user-badge">Загрузка профиля...</div>
+    </header>
 
-    <!-- Переключатель вкладок -->
-    <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('wallet-page', this)">💼 Кошелек</button>
-        <button class="tab-btn" onclick="switchTab('deal-page', this)">📄 Создать сделку</button>
-    </div>
-
-    <!-- ВКЛАДКА 1: КОШЕЛЕК -->
-    <div id="wallet-page" class="page active">
-        <div class="card">
-            <h3 style="margin-top:0; color:#31b6ff;">📊 Баланс карт</h3>
-            <div class="balance-item"><span>🇷🇺 Рубли:</span> <strong>0.00 RUB</strong></div>
-            <div class="balance-item"><span>🇧🇾 Буни:</span> <strong>0.00 BYN</strong></div>
-            <div class="balance-item"><span>🇰🇿 Тенге:</span> <strong>0.00 KZT</strong></div>
-            <div class="balance-item"><span>🇺🇦 Гривны:</span> <strong>0.00 UAH</strong></div>
-        </div>
-    </div>
-
-    <!-- ВКЛАДКА 2: СОЗДАНИЕ СДЕЛКИ -->
-    <div id="deal-page" class="page">
-        <div class="card">
-            <h3 style="margin-top:0; color:#31b6ff;">💼 Параметры новой сделки</h3>
+    <div class="container">
+        
+        <!-- СТРАНИЦА 1: ГЛАВНАЯ / КОШЕЛЕК -->
+        <div id="wallet-page" class="page active">
+            <div class="card">
+                <div class="card-title">💰 Мой баланс карт</div>
+                <div class="balance-row">
+                    <div class="curr-name"><span class="curr-flag">🇷🇺</span>Рубли (RUB)</div>
+                    <div class="curr-val" id="bal-rub">0.00</div>
+                </div>
+                <div class="balance-row">
+                    <div class="curr-name"><span class="curr-flag">🇧🇾</span>Буни (BYN)</div>
+                    <div class="curr-val" id="bal-byn">0.00</div>
+                </div>
+                <div class="balance-row">
+                    <div class="curr-name"><span class="curr-flag">🇰🇿</span>Тенге (KZT)</div>
+                    <div class="curr-val" id="bal-kzt">0.00</div>
+                </div>
+                <div class="balance-row">
+                    <div class="curr-name"><span class="curr-flag">🇺🇦</span>Гривны (UAH)</div>
+                    <div class="curr-val" id="bal-uah">0.00</div>
+                </div>
+            </div>
             
-            <div class="form-group">
-                <label>Валюта сделки</label>
-                <select id="deal-currency">
-                    <option value="RUB">🇷🇺 Рубли (RUB)</option>
-                    <option value="BYN">🇧🇾 Буни (BYN)</option>
-                    <option value="KZT">🇰🇿 Тенге (KZT)</option>
-                    <option value="UAH">🇺🇦 Гривны (UAH)</option>
-                    <option value="TON">💎 Криптовалюта (TON)</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Сумма сделки</label>
-                <input type="number" id="deal-amount" placeholder="Например: 500" min="1">
-            </div>
-
-            <div class="form-group">
-                <label>Описание товара или услуги</label>
-                <textarea id="deal-desc" placeholder="Укажите, что вы продаете в этой сделке..."></textarea>
-            </div>
-
-            <button class="btn" onclick="submitDeal()">✨ Создать сделку</button>
+            <button class="btn btn-success" onclick="openWithdrawForm()">📤 Вывести средства</button>
+            <button class="btn btn-secondary" onclick="tg.openLink('https://t.me')">📞 Связаться с поддержкой</button>
         </div>
+
+        <!-- СТРАНИЦА 2: СОЗДАТЬ СДЕЛКУ -->
+        <div id="deal-page" class="page">
+            <div class="card">
+                <div class="card-title">📄 Создание P2P Сделки</div>
+                <div class="info-box">Вы выступаете в роли Продавца. Ссылка на сделку будет отправлена в чат с ботом после подтверждения.</div>
+                
+                <div class="form-group">
+                    <label>Валюта расчетов</label>
+                    <select id="deal-currency">
+                        <option value="RUB">🇷🇺 Рубли (RUB)</option>
+                        <option value="BYN">🇧🇾 Буни (BYN)</option>
+                        <option value="KZT">🇰🇿 Тенге (KZT)</option>
+                        <option value="UAH">🇺🇦 Гривны (UAH)</option>
+                        <option value="TON">💎 Криптовалюта (TON)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Сумма сделки</label>
+                    <input type="number" id="deal-amount" placeholder="Введите сумму (например: 1500)">
+                </div>
+                <div class="form-group">
+                    <label>Описание условий сделки</label>
+                    <textarea id="deal-desc" placeholder="Укажите детали (например: Telegram Gift 12 месяцев)"></textarea>
+                </div>
+                <button class="btn" onclick="submitDeal()">✨ Сформировать сделку</button>
+            </div>
+        </div>
+
+        <!-- СТРАНИЦА 3: НАСТРОЙКА РЕКВИЗИТОВ -->
+        <div id="requisites-page" class="page">
+            <div class="card">
+                <div class="card-title">⚙️ Привязка реквизитов</div>
+                <div class="info-box">Заполните поля, чтобы отправлять реквизиты покупателям автоматически. Для сохранения нажмите кнопку.</div>
+                
+                <div class="form-group">
+                    <label>Криптовалютный TON-адрес</label>
+                    <input type="text" id="req-ton" placeholder="UQ... или EQ...">
+                </div>
+                <div class="form-group">
+                    <label>Реквизиты банковской карты</label>
+                    <input type="text" id="req-card" placeholder="Сбербанк - 4400...">
+                </div>
+                <button class="btn btn-success" onclick="submitRequisites()">💾 Сохранить реквизиты</button>
+            </div>
+        </div>
+
+        <!-- СТРАНИЦА 4: РЕФЕРАЛЫ -->
+        <div id="referral-page" class="page">
+            <div class="card">
+                <div class="card-title">📎 Реферальная программа</div>
+                <div class="info-box">Приглашайте трейдеров и получайте процент с каждой совершенной ими P2P-сделки через нашего гаранта.</div>
+                
+                <div class="balance-row">
+                    <div>Приглашено пользователей:</div>
+                    <div style="font-weight:700;" id="ref-count">0 челов</div>
+                </div>
+                <div class="balance-row">
+                    <div>Заработано на рефералах:</div><div style="font-weight:700; color:#2ec4b6;" id="ref-earned">0.00 TON</div>
+                </div>
+                <button class="btn btn-secondary" onclick="shareReferralLink()">🔗 Получить реф-ссылку в чат</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="nav-bar">
+        <button class="nav-item active" onclick="switchPage('wallet-page', this)">
+            <div class="nav-icon">💼</div>
+            <div class="nav-label">Кошелек</div>
+        </button>
+        <button class="nav-item" onclick="switchPage('deal-page', this)">
+            <div class="nav-icon">📄</div>
+            <div class="nav-label">Сделка</div>
+        </button>
+        <button class="nav-item" onclick="switchPage('requisites-page', this)">
+            <div class="nav-icon">⚙️</div>
+            <div class="nav-label">Реквизиты</div>
+        </button>
+        <button class="nav-item" onclick="switchPage('referral-page', this)">
+            <div class="nav-icon">📎</div>
+            <div class="nav-label">Рефералы</div>
+        </button>
     </div>
 
     <script>
@@ -153,46 +279,52 @@
 
         const user = tg.initDataUnsafe?.user;
         if (user) {
-            document.getElementById('username-display').innerText = `Профиль: ${user.first_name} (ID: ${user.id})`;
+            document.getElementById('username-display').innerText = `${user.first_name} | ID: ${user.id}`;
         }
 
-        // Переключение между Кошельком и Сделками
-        function switchTab(pageId, button) {
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(btn => button.classList.remove('active'));
+        function switchPage(pageId, element) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             
             document.getElementById(pageId).classList.add('active');
-            
-            const buttons = document.querySelectorAll('.tab-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
+            element.classList.add('active');
         }
 
-        // Сбор данных формы и отправка боту
+        function openWithdrawForm() {
+            tg.sendData(JSON.stringify({ action: "trigger_withdraw_menu" }));
+        }
+
+        function shareReferralLink() {
+            tg.sendData(JSON.stringify({ action: "trigger_referral_menu" }));
+        }
+
         function submitDeal() {
             const currency = document.getElementById('deal-currency').value;
             const amount = document.getElementById('deal-amount').value;
             const desc = document.getElementById('deal-desc').value.trim();
 
-            if (!amount || amount <= 0) {
-                alert("❌ Пожалуйста, введите корректную сумму сделки!");
-                return;
-            }
-            if (!desc) {
-                alert("❌ Пожалуйста, заполните описание сделки!");
-                return;
-            }
+            if (!amount || amount <= 0) { alert("❌ Введите корректную сумму!"); return; }
+            if (!desc) { alert("❌ Укажите описание условий!"); return; }
 
-            // Формируем структурированный пакет данных для бота
-            const dealData = {
+            tg.sendData(JSON.stringify({
                 action: "create_deal_from_webapp",
                 currency: currency,
                 amount: parseFloat(amount),
                 description: desc
-            };
+            }));
+        }
 
-            // Метод Telegram отправляет этот текст обратно боту в чат и закрывает Mini App
-            tg.sendData(JSON.stringify(dealData));
+        function submitRequisites() {
+            const tonWallet = document.getElementById('req-ton').value.trim();
+            const cardDetails = document.getElementById('req-card').value.trim();
+
+            if (!tonWallet && !cardDetails) { alert("❌ Заполните хотя бы одно поле!"); return; }
+
+            tg.sendData(JSON.stringify({
+                action: "save_requisites_from_webapp",
+                ton_wallet: tonWallet,
+                cng_wallet: cardDetails
+            }));
         }
     </script>
 </body>
