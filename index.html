@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ELF OTC PREMIUM</title>
+    <!-- Официальный скрипт Telegram Mini Apps -->
     <script src="https://telegram.org"></script>
     <style>
         :root {
@@ -21,7 +22,7 @@
             color: var(--text-color);
             margin: 0;
             padding: 0;
-            padding-bottom: 80px; /* Отступ для нижнего меню */
+            padding-bottom: 80px;
             box-sizing: border-box;
         }
         header {
@@ -40,7 +41,6 @@
         .page { display: none; }
         .page.active { display: block; }
         
-        /* Карточки и Счета */
         .card {
             background-color: var(--card-color);
             border-radius: 16px;
@@ -70,7 +70,6 @@
         .curr-flag { margin-right: 10px; font-size: 18px; }
         .curr-val { font-size: 18px; font-weight: 700; font-family: monospace; }
         
-        /* Формы и Инпуты */
         .form-group { margin-bottom: 15px; }
         label { display: block; font-size: 13px; color: var(--hint-color); margin-bottom: 6px; font-weight: 600; }
         input, select, textarea {
@@ -82,15 +81,9 @@
             color: var(--text-color);
             font-size: 16px;
             box-sizing: border-box;
-            transition: border-color 0.2s;
-        }
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--accent-color);
         }
         textarea { resize: vertical; height: 90px; }
         
-        /* Кнопки */
         .btn {
             background-color: var(--accent-color);
             color: #ffffff;
@@ -103,13 +96,10 @@
             width: 100%;
             box-sizing: border-box;
             box-shadow: 0 4px 12px rgba(36,129,204,0.3);
-            transition: opacity 0.1s;
         }
-        .btn:active { opacity: 0.8; }
         .btn-success { background-color: var(--success-color); box-shadow: 0 4px 12px rgba(46,196,182,0.3); }
         .btn-secondary { background-color: #1c2e42; color: #31b6ff; box-shadow: none; margin-top: 10px; }
         
-        /* Нижнее Навигационное Меню */
         .nav-bar {
             position: fixed;
             bottom: 0;
@@ -134,13 +124,11 @@
             cursor: pointer;
             flex-grow: 1;
             padding: 8px 0;
-            transition: color 0.2s;
         }
         .nav-item.active { color: #31b6ff; }
         .nav-icon { font-size: 20px; margin-bottom: 4px; }
         .nav-label { font-size: 11px; font-weight: 600; }
         
-        /* Информационные плашки */
         .info-box {
             background-color: rgba(49,182,255,0.05);
             border-left: 4px solid #31b6ff;
@@ -185,7 +173,7 @@
             </div>
             
             <button class="btn btn-success" onclick="openWithdrawForm()">📤 Вывести средства</button>
-            <button class="btn btn-secondary" onclick="tg.openLink('https://t.me')">📞 Связаться с поддержкой</button>
+            <button class="btn btn-secondary" onclick="window.Telegram.WebApp.openLink('https://t.me')">📞 Связаться с поддержкой</button>
         </div>
 
         <!-- СТРАНИЦА 2: СОЗДАТЬ СДЕЛКУ -->
@@ -245,7 +233,8 @@
                     <div style="font-weight:700;" id="ref-count">0 челов</div>
                 </div>
                 <div class="balance-row">
-                    <div>Заработано на рефералах:</div><div style="font-weight:700; color:#2ec4b6;" id="ref-earned">0.00 TON</div>
+                    <div>Заработано на рефералах:</div>
+                    <div style="font-weight:700; color:#2ec4b6;" id="ref-earned">0.00 TON</div>
                 </div>
                 <button class="btn btn-secondary" onclick="shareReferralLink()">🔗 Получить реф-ссылку в чат</button>
             </div>
@@ -255,33 +244,26 @@
 
     <div class="nav-bar">
         <button class="nav-item active" onclick="switchPage('wallet-page', this)">
-            <div class="nav-icon">💼</div>
-            <div class="nav-label">Кошелек</div>
-        </button>
-        <button class="nav-item" onclick="switchPage('deal-page', this)">
-            <div class="nav-icon">📄</div>
-            <div class="nav-label">Сделка</div>
-        </button>
-        <button class="nav-item" onclick="switchPage('requisites-page', this)">
-            <div class="nav-icon">⚙️</div>
-            <div class="nav-label">Реквизиты</div>
-        </button>
-        <button class="nav-item" onclick="switchPage('referral-page', this)">
-            <div class="nav-icon">📎</div>
-            <div class="nav-label">Рефералы</div>
-        </button>
-    </div>
-
+</body>
+</html>
     <script>
         const tg = window.Telegram.WebApp;
         tg.ready();
         tg.expand();
 
-        const user = tg.initDataUnsafe?.user;
-        if (user) {
-            document.getElementById('username-display').innerText = `${user.first_name} | ID: ${user.id}`;
+        // Безопасное получение профиля
+        try {
+            const user = tg.initDataUnsafe?.user;
+            if (user && user.first_name) {
+                document.getElementById('username-display').innerText = `${user.first_name} | ID: ${user.id}`;
+            } else {
+                document.getElementById('username-display').innerText = "Premium OTC Трейдер";
+            }
+        } catch(e) {
+            document.getElementById('username-display').innerText = "Premium OTC Аккаунт";
         }
 
+        // Переключение экранов
         function switchPage(pageId, element) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
@@ -328,4 +310,4 @@
         }
     </script>
 </body>
-</html>
+</html
