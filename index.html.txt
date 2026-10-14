@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELF OTC Wallet</title>
+    <!-- Подключаем официальный скрипт Telegram Mini Apps -->
+    <script src="https://telegram.org"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--tg-theme-background-color, #18222d);
+            color: var(--tg-theme-text-color, #ffffff);
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .card {
+            background: var(--tg-theme-secondary-background-color, #212d3b);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        h1 { color: #31b6ff; margin-bottom: 5px; }
+        .balance-item {
+            font-size: 20px;
+            margin: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+        .btn {
+            background-color: var(--tg-theme-button-color, #2481cc);
+            color: var(--tg-theme-button-text-color, #ffffff);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>ELF OTC</h1>
+    <div id="username-display">Загрузка профиля...</div>
+
+    <div class="card">
+        <h3>💰 Ваши счета СНГ</h3>
+        <div class="balance-item"><span>🇷🇺 Рубли:</span> <strong id="rub-bal">0.00 RUB</strong></div>
+        <div class="balance-item"><span>🇧🇾 Буни:</span> <strong id="byn-bal">0.00 BYN</strong></div>
+        <div class="balance-item"><span>🇰🇿 Тенге:</span> <strong id="kzt-bal">0.00 KZT</strong></div>
+        <div class="balance-item"><span>🇺🇦 Гривны:</span> <strong id="uah-bal">0.00 UAH</strong></div>
+    </div>
+
+    <button class="btn" onclick="closeApp()">Вернуться в чат</button>
+
+    <script>
+        // Инициализируем WebApp
+        const tg = window.Telegram.WebApp;
+        tg.ready(); // Сообщаем Telegram, что приложение загрузилось
+        tg.expand(); // Разворачиваем Mini App на весь экран
+
+        // Отображаем имя пользователя из Telegram
+        const user = tg.initDataUnsafe?.user;
+        if (user) {
+            document.getElementById('username-display').innerText = `Привет, ${user.first_name}! 👋 (ID: ${user.id})`;
+        } else {
+            document.getElementById('username-display').innerText = "Профиль открыт вне Telegram";
+        }
+
+        // Функция закрытия приложения
+        function closeApp() {
+            tg.close();
+        }
+    </script>
+</body>
+</html>
