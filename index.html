@@ -246,38 +246,64 @@
         <button class="nav-item active" onclick="switchPage('wallet-page', this)">
 </body>
 </html>
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.ready();
-        tg.expand();
-
-        // Безопасное получение профиля
-        try {
-            const user = tg.initDataUnsafe?.user;
-            if (user && user.first_name) {
-                document.getElementById('username-display').innerText = `${user.first_name} | ID: ${user.id}`;
-            } else {
-                document.getElementById('username-display').innerText = "Premium OTC Трейдер";
-            }
-        } catch(e) {
-            document.getElementById('username-display').innerText = "Premium OTC Аккаунт";
+   <script>
+        // Принудительно проверяем инициализацию объекта Telegram
+        const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+        
+        if (tg) {
+            tg.ready();
+            tg.expand();
         }
+
+        // Безопасное получение профиля с гарантированным обходом зависания
+        function loadUserProfile() {
+            const displayEl = document.getElementById('username-display');
+            if (!displayEl) return;
+
+            try {
+                if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) {
+                    const user = tg.initDataUnsafe.user;
+                    if (user.first_name) {
+                        displayEl.innerText = user.first_name + " | ID: " + user.id;
+                        return;
+                    }
+                }
+            } catch(e) {
+                console.log("Ошибка получения данных ТГ:", e);
+            }
+            
+            // Если открыто с ПК или кэш завис — принудительно убираем загрузку
+            displayEl.innerText = "Premium OTC Трейдер 🔥";
+        }
+
+        // Запускаем проверку профиля сразу при старте страницы
+        window.addEventListener('DOMContentLoaded', loadUserProfile);
+        setTimeout(loadUserProfile, 500); // Дублирующий вызов для надежности
 
         // Переключение экранов
         function switchPage(pageId, element) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
             
-            document.getElementById(pageId).classList.add('active');
-            element.classList.add('active');
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) targetPage.classList.add('active');
+            if (element) element.classList.add('active');
         }
 
         function openWithdrawForm() {
-            tg.sendData(JSON.stringify({ action: "trigger_withdraw_menu" }));
+            if (tg) {
+                tg.sendData(JSON.stringify({ action: "trigger_withdraw_menu" }));
+            } else {
+                alert("Функция доступна только внутри Telegram чата");
+            }
         }
 
         function shareReferralLink() {
-            tg.sendData(JSON.stringify({ action: "trigger_referral_menu" }));
+            if (tg) {
+                tg.sendData(JSON.stringify({ action: "trigger_referral_menu" }));
+            } else {
+                alert("Функция доступна только внутри Telegram чата");
+            }
         }
 
         function submitDeal() {
@@ -288,12 +314,16 @@
             if (!amount || amount <= 0) { alert("❌ Введите корректную сумму!"); return; }
             if (!desc) { alert("❌ Укажите описание условий!"); return; }
 
-            tg.sendData(JSON.stringify({
-                action: "create_deal_from_webapp",
-                currency: currency,
-                amount: parseFloat(amount),
-                description: desc
-            }));
+            if (tg) {
+                tg.sendData(JSON.stringify({
+                    action: "create_deal_from_webapp",
+                    currency: currency,
+                    amount: parseFloat(amount),
+                    description: desc
+                }));
+            } else {
+                alert("Данные будут отправлены боту. Откройте приложение в Telegram.");
+            }
         }
 
         function submitRequisites() {
@@ -302,12 +332,16 @@
 
             if (!tonWallet && !cardDetails) { alert("❌ Заполните хотя бы одно поле!"); return; }
 
-            tg.sendData(JSON.stringify({
-                action: "save_requisites_from_webapp",
-                ton_wallet: tonWallet,
-                cng_wallet: cardDetails
-            }));
+            if (tg) {
+                tg.sendData(JSON.stringify({
+                    action: "save_requisites_from_webapp",
+                    ton_wallet: tonWallet,
+                    cng_wallet: cardDetails
+                }));
+            } else {
+                alert("Реквизиты будут сохранены. Откройте приложение в Telegram.");
+            }
         }
     </script>
 </body>
-</html
+</html>
